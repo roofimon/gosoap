@@ -50,7 +50,7 @@ type {{$message.Name}} struct {
 
 func (d *Definition) String() string {
 	var b bytes.Buffer
-	tmpl, _ := template.New("test").Parse(structTemplate)
+	tmpl, _ := template.New("structTemplate").Parse(structTemplate)
 	d.Sanitize()
 	tmpl.Execute(&b, d)
 	return b.String()
