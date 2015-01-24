@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/xml"
 	"io/ioutil"
 	"strings"
+	"text/template"
 )
 
 type Part struct {
@@ -37,6 +39,21 @@ func (d *Definition) Sanitize() {
 
 func (d *Definition) saveToFile() {
 	ioutil.WriteFile(d.Name+".go", []byte(""), 0644)
+}
+
+var structTemplate = `package ws
+{{range $message := .Messages}}
+type {{$message.Name}} struct {
+	{{$message.Part.Name}} {{$message.Part.Type}}
+}
+{{end}}`
+
+func (d *Definition) String() string {
+	var b bytes.Buffer
+	tmpl, _ := template.New("test").Parse(structTemplate)
+	d.Sanitize()
+	tmpl.Execute(&b, d)
+	return b.String()
 }
 
 func ParseWSDLByteArray(definitionByteArray []byte) Definition {

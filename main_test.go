@@ -110,3 +110,22 @@ func TestWriteFile(t *testing.T) {
 
 	os.Remove(expected)
 }
+
+func TestStringFromDefinition(t *testing.T) {
+	var definition Definition = expectedDefinition
+	expected := `package ws
+
+type SayHelloRequest struct {
+	firstName string
+}
+
+type SayHelloResponse struct {
+	greeting string
+}
+`
+
+	if expected != definition.String() {
+		t.Errorf("Expected %s but got %s", expected, definition.String())
+	}
+
+}
