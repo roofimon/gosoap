@@ -41,7 +41,7 @@ func TestSanitizeDefinition(t *testing.T) {
 	}
 }
 
-func TestConvertDefinition(t *testing.T) {
+func TestConvertDefinitionWithMultipleMessages(t *testing.T) {
 
 	expected := Definition{
 		Messages: []Message{
@@ -49,6 +49,13 @@ func TestConvertDefinition(t *testing.T) {
 				Name: "SayHelloRequest",
 				Part: Part{
 					Name: "firstName",
+					Type: "xsd:string",
+				},
+			},
+			Message{
+				Name: "SayHelloResponse",
+				Part: Part{
+					Name: "greeting",
 					Type: "xsd:string",
 				},
 			},
@@ -63,6 +70,9 @@ func TestConvertDefinition(t *testing.T) {
    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <message name="SayHelloRequest">
    	<part name="firstName" type="xsd:string"/>
+   	</message>
+   <message name="SayHelloResponse">
+   	<part name="greeting" type="xsd:string"/>
    	</message>
    </definitions>`)
 
