@@ -22,7 +22,7 @@ func TestSanitize(t *testing.T) {
 }
 
 func TestSanitizeMessage(t *testing.T) {
-	expected := Part{Name: "firstName", Type: "string"}
+	expected := Part{Name: "FirstName", Type: "string"}
 
 	message.Sanitize()
 
@@ -32,7 +32,7 @@ func TestSanitizeMessage(t *testing.T) {
 }
 
 func TestSanitizeDefinition(t *testing.T) {
-	expected_message := Message{Name: "SayHelloRequest", Part: Part{Name: "firstName", Type: "string"}}
+	expected_message := Message{Name: "SayHelloRequest", Part: Part{Name: "FirstName", Type: "string"}}
 	expected := Definition{Messages: []Message{expected_message}}
 
 	definition := Definition{Messages: []Message{message}}
@@ -116,11 +116,11 @@ func TestWriteFile(t *testing.T) {
 	expected := []byte(`package ws
 
 type SayHelloRequest struct {
-	firstName string
+	FirstName string
 }
 
 type SayHelloResponse struct {
-	greeting string
+	Greeting string
 }
 
 func sayHello(req *SayHelloRequest) (*SayHelloResponse, error) {

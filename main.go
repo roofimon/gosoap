@@ -14,6 +14,7 @@ type Part struct {
 }
 
 func (p *Part) Sanitize() {
+	p.Name = strings.ToUpper(string(p.Name[0])) + p.Name[1:]
 	p.Type = strings.Replace(p.Type, "xsd:", "", -1)
 }
 
