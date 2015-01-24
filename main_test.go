@@ -44,6 +44,7 @@ func TestSanitizeDefinition(t *testing.T) {
 func TestConvertDefinitionWithMultipleMessages(t *testing.T) {
 
 	expected := Definition{
+		Name: "HelloService",
 		Messages: []Message{
 			Message{
 				Name: "SayHelloRequest",
@@ -78,7 +79,7 @@ func TestConvertDefinitionWithMultipleMessages(t *testing.T) {
 
 	definition := ParseWSDLByteArray(definitionByteArray)
 
-	if reflect.DeepEqual(expected, definition) {
+	if !reflect.DeepEqual(expected, definition) {
 		t.Errorf("Expected %v but got %v", expected, definition)
 	}
 }

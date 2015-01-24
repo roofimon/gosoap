@@ -24,7 +24,8 @@ func (m *Message) Sanitize() {
 }
 
 type Definition struct {
-	Messages []Message
+	Name     string    `xml:"name,attr"`
+	Messages []Message `xml:"message"`
 }
 
 func (d *Definition) Sanitize() {
