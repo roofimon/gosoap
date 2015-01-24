@@ -38,7 +38,7 @@ func (d *Definition) Sanitize() {
 }
 
 func (d *Definition) saveToFile() {
-	ioutil.WriteFile(d.Name+".go", []byte(""), 0644)
+	ioutil.WriteFile(d.Name+".go", []byte(d.String()), 0644)
 }
 
 var structTemplate = `package ws

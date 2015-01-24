@@ -97,23 +97,8 @@ func TestParseFile(t *testing.T) {
 }
 
 func TestWriteFile(t *testing.T) {
-	expected := "HelloService.go"
-	var definition Definition = expectedDefinition
-	definition.Sanitize()
-
-	definition.saveToFile()
-
-	if _, err := os.Stat(expected); os.IsNotExist(err) {
-		t.Errorf("no such file or directory: %s", expected)
-		return
-	}
-
-	os.Remove(expected)
-}
-
-func TestStringFromDefinition(t *testing.T) {
-	var definition Definition = expectedDefinition
-	expected := `package ws
+	filename := "HelloService.go"
+	expected := []byte(`package ws
 
 type SayHelloRequest struct {
 	firstName string
@@ -122,10 +107,16 @@ type SayHelloRequest struct {
 type SayHelloResponse struct {
 	greeting string
 }
-`
+`)
+	var definition Definition = expectedDefinition
+	definition.Sanitize()
 
-	if expected != definition.String() {
-		t.Errorf("Expected %s but got %s", expected, definition.String())
+	definition.saveToFile()
+	data, _ := ioutil.ReadFile(filename)
+
+	if string(data) != string(expected) {
+		t.Errorf("Expected %s but got %s", expected, data)
 	}
 
+	os.Remove(filename)
 }
