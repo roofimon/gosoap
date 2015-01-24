@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/xml"
+	"fmt"
 	"io/ioutil"
 	"strings"
 	"text/template"
@@ -44,7 +45,7 @@ type Input struct {
 }
 
 type Output struct {
-	Message string `xml:"message,attr"`
+	Message string `xml:message,attr"`
 }
 
 func RemoveNamespace(input string) string {
@@ -83,4 +84,11 @@ func ParseFile(filename string) Definition {
 	data, _ := ioutil.ReadFile(filename)
 	return ParseWSDLByteArray(data)
 
+}
+
+func main() {
+	d := ParseFile("resources/stockquote.wsdl")
+	d.Name = "StockQuote"
+	fmt.Println(d.Name)
+	d.saveToFile()
 }
