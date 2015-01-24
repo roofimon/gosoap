@@ -48,11 +48,16 @@ type PortType struct {
 }
 
 type Operation struct {
-	Name  string `xml:"name,attr"`
-	Input Input  `xml:"input"`
+	Name   string `xml:"name,attr"`
+	Input  Input  `xml:"input"`
+	Output Output `xml:"output"`
 }
 
 type Input struct {
+	Message string `xml:"message,attr"`
+}
+
+type Output struct {
 	Message string `xml:"message,attr"`
 }
 

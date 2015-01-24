@@ -85,8 +85,9 @@ var expectedDefinition Definition = Definition{
 	PortType: PortType{
 		Name: "Hello_PortType",
 		Operation: Operation{
-			Name:  "sayHello",
-			Input: Input{Message: "tns:SayHelloRequest"},
+			Name:   "sayHello",
+			Input:  Input{Message: "tns:SayHelloRequest"},
+			Output: Output{Message: "tns:SayHelloResponse"},
 		},
 	},
 }
@@ -139,8 +140,9 @@ func TestExtractPortType(t *testing.T) {
 	expected := PortType{
 		Name: "Hello_PortType",
 		Operation: Operation{
-			Name:  "sayHello",
-			Input: Input{Message: "tns:SayHelloRequest"},
+			Name:   "sayHello",
+			Input:  Input{Message: "tns:SayHelloRequest"},
+			Output: Output{Message: "tns:SayHelloResponse"},
 		},
 	}
 	wsdl := []byte(`   <portType name="Hello_PortType">
