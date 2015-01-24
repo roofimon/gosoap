@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+var message Message = Message{Name: "SayHelloRequest", Part: Part{Name: "firstName", Type: "xsd:string"}}
+
 func TestSanitize(t *testing.T) {
 	expected := "string"
 	part := Part{Name: "firstName", Type: "xsd:string"}
@@ -18,7 +20,6 @@ func TestSanitize(t *testing.T) {
 
 func TestSanitizeMessage(t *testing.T) {
 	expected := Part{Name: "firstName", Type: "string"}
-	message := Message{Part{Name: "firstName", Type: "xsd:string"}}
 
 	message.Sanitize()
 
@@ -28,10 +29,9 @@ func TestSanitizeMessage(t *testing.T) {
 }
 
 func TestSanitizeDefinition(t *testing.T) {
-	expected_message := Message{Part{Name: "firstName", Type: "string"}}
+	expected_message := Message{Name: "SayHelloRequest", Part: Part{Name: "firstName", Type: "string"}}
 	expected := Definition{Messages: []Message{expected_message}}
 
-	message := Message{Part{Name: "firstName", Type: "xsd:string"}}
 	definition := Definition{Messages: []Message{message}}
 
 	definition.Sanitize()
@@ -46,6 +46,7 @@ func TestConvertDefinition(t *testing.T) {
 	expected := Definition{
 		Messages: []Message{
 			Message{
+				Name: "SayHelloRequest",
 				Part: Part{
 					Name: "firstName",
 					Type: "xsd:string",
@@ -60,7 +61,9 @@ func TestConvertDefinition(t *testing.T) {
    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
    xmlns:tns="http://www.examples.com/wsdl/HelloService.wsdl"
    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <message><part name="firstName" type="xsd:string"/></message>
+   <message name="SayHelloRequest">
+   	<part name="firstName" type="xsd:string"/>
+   	</message>
    </definitions>`)
 
 	definition := ParseWSDLByteArray(definitionByteArray)

@@ -15,7 +15,8 @@ func (p *Part) Sanitize() {
 }
 
 type Message struct {
-	Part Part `xml:"part"`
+	Name string `xml:"name,attr"`
+	Part Part   `xml:"part"`
 }
 
 func (m *Message) Sanitize() {
