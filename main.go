@@ -1,10 +1,13 @@
 package main
 
-import "strings"
+import (
+	"encoding/xml"
+	"strings"
+)
 
 type Part struct {
-	Name string
-	Type string
+	Name string `xml:"name,attr"`
+	Type string `xml:"type,attr"`
 }
 
 func (p *Part) Sanitize() {
@@ -27,4 +30,10 @@ func (d *Definition) Sanitize() {
 	for id := range d.Messages {
 		d.Messages[id].Sanitize()
 	}
+}
+
+func ParseWSDLByteArray(partByteArray []byte) Part {
+	var part Part
+	xml.Unmarshal(partByteArray, &part)
+	return part
 }

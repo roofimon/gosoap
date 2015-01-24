@@ -40,3 +40,16 @@ func TestSanitizeDefinition(t *testing.T) {
 		t.Errorf(("Expected %v but got %v"), expected, definition)
 	}
 }
+
+func TestConvertWSDLPart(t *testing.T) {
+	expected := Part{
+		Name: "firstName",
+		Type: "xsd:string",
+	}
+	partByteArray := []byte(`<part name="firstName" type="xsd:string"/>`)
+	part := ParseWSDLByteArray(partByteArray)
+
+	if part != expected {
+		t.Errorf("Expected %v but got %v", expected, part)
+	}
+}
