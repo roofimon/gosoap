@@ -10,40 +10,6 @@ import (
 
 var message Message = Message{Name: "SayHelloRequest", Part: Part{Name: "firstName", Type: "xsd:string"}}
 
-func TestSanitize(t *testing.T) {
-	expected := "string"
-	part := Part{Name: "firstName", Type: "xsd:string"}
-
-	part.Sanitize()
-
-	if part.Type != expected {
-		t.Errorf("Expected %s but got %s", expected, part.Type)
-	}
-}
-
-func TestSanitizeMessage(t *testing.T) {
-	expected := Part{Name: "firstName", Type: "string"}
-
-	message.Sanitize()
-
-	if message.Part != expected {
-		t.Errorf("Expected %v but got %v", expected, message.Part)
-	}
-}
-
-func TestSanitizeDefinition(t *testing.T) {
-	expected_message := Message{Name: "SayHelloRequest", Part: Part{Name: "firstName", Type: "string"}}
-	expected := Definition{Messages: []Message{expected_message}}
-
-	definition := Definition{Messages: []Message{message}}
-
-	definition.Sanitize()
-
-	if !reflect.DeepEqual(definition, expected) {
-		t.Errorf(("Expected %v but got %v"), expected, definition)
-	}
-}
-
 var definitionByteArray []byte = []byte(`<definitions name="HelloService"
    targetNamespace="http://www.examples.com/wsdl/HelloService.wsdl"
    xmlns="http://schemas.xmlsoap.org/wsdl/"
@@ -127,7 +93,6 @@ func SayHello(req *SayHelloRequest) (*SayHelloResponse, error) {
 }
 `)
 	var definition Definition = expectedDefinition
-	definition.Sanitize()
 
 	definition.saveToFile()
 	data, _ := ioutil.ReadFile(filename)
@@ -164,66 +129,11 @@ func TestExtractPortType(t *testing.T) {
 
 }
 
-func TestSanitizeInput(t *testing.T) {
-	expected := Input{Message: "SayHelloRequest"}
-	input := Input{Message: "tns:SayHelloRequest"}
-
-	input.Sanitize()
-
-	if expected != input {
-		t.Errorf("Expected %v but got %v", expected, input)
-	}
-}
-
-func TestSanitizeOutput(t *testing.T) {
-	expected := Output{Message: "SayHelloResponse"}
-	output := Output{Message: "tns:SayHelloResponse"}
-
-	output.Sanitize()
-
-	if expected != output {
-		t.Errorf("Expected %v but got %v", expected, output)
-	}
-}
-
-func TestSanitizeOperation(t *testing.T) {
-	expected := Operation{
-		Name:   "sayHello",
-		Input:  Input{Message: "SayHelloRequest"},
-		Output: Output{Message: "SayHelloResponse"},
-	}
-	operation := Operation{
-		Name:   "sayHello",
-		Input:  Input{Message: "tns:SayHelloRequest"},
-		Output: Output{Message: "tns:SayHelloResponse"},
-	}
-
-	operation.Sanitize()
-
-	if expected != operation {
-		t.Errorf("Expected %v but got %v", expected, operation)
-	}
-}
-
-func TestSanitizePortType(t *testing.T) {
-	expected := PortType{
-		Operation: Operation{
-			Name:   "sayHello",
-			Input:  Input{Message: "SayHelloRequest"},
-			Output: Output{Message: "SayHelloResponse"},
-		},
-	}
-	portType := PortType{
-		Operation: Operation{
-			Name:   "sayHello",
-			Input:  Input{Message: "tns:SayHelloRequest"},
-			Output: Output{Message: "tns:SayHelloResponse"},
-		},
-	}
-
-	portType.Sanitize()
-
-	if expected != portType {
-		t.Errorf("Expected %v but got %v", expected, portType)
+func TestRemoveNamespace(t *testing.T) {
+	expected := "string"
+	input := "tns:string"
+	result := RemoveNamespace(input)
+	if result != expected {
+		t.Errorf("Expected %v but got %v", expected, result)
 	}
 }
