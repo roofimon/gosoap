@@ -22,7 +22,7 @@ func TestSanitize(t *testing.T) {
 }
 
 func TestSanitizeMessage(t *testing.T) {
-	expected := Part{Name: "FirstName", Type: "string"}
+	expected := Part{Name: "firstName", Type: "string"}
 
 	message.Sanitize()
 
@@ -32,7 +32,7 @@ func TestSanitizeMessage(t *testing.T) {
 }
 
 func TestSanitizeDefinition(t *testing.T) {
-	expected_message := Message{Name: "SayHelloRequest", Part: Part{Name: "FirstName", Type: "string"}}
+	expected_message := Message{Name: "SayHelloRequest", Part: Part{Name: "firstName", Type: "string"}}
 	expected := Definition{Messages: []Message{expected_message}}
 
 	definition := Definition{Messages: []Message{message}}
@@ -123,7 +123,7 @@ type SayHelloResponse struct {
 	Greeting string
 }
 
-func sayHello(req *SayHelloRequest) (*SayHelloResponse, error) {
+func SayHello(req *SayHelloRequest) (*SayHelloResponse, error) {
 }
 `)
 	var definition Definition = expectedDefinition

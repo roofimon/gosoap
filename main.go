@@ -14,7 +14,6 @@ type Part struct {
 }
 
 func (p *Part) Sanitize() {
-	p.Name = strings.ToUpper(string(p.Name[0])) + p.Name[1:]
 	p.Type = strings.Replace(p.Type, "xsd:", "", -1)
 }
 
@@ -80,19 +79,23 @@ func (i *Output) Sanitize() {
 	i.Message = strings.Replace(i.Message, "tns:", "", -1)
 }
 
+var funcMap template.FuncMap = template.FuncMap{
+	"title": strings.Title,
+}
+
 var structTemplate = `package ws
 {{range $message := .Messages}}
 type {{$message.Name}} struct {
-	{{$message.Part.Name}} {{$message.Part.Type}}
+	{{title $message.Part.Name}} {{$message.Part.Type}}
 }
 {{end}}
-func {{.PortType.Operation.Name}}(req *{{.PortType.Operation.Input.Message}}) (*{{.PortType.Operation.Output.Message}}, error) {
+func {{title .PortType.Operation.Name}}(req *{{.PortType.Operation.Input.Message}}) (*{{.PortType.Operation.Output.Message}}, error) {
 }
 `
 
 func (d *Definition) String() string {
 	var b bytes.Buffer
-	tmpl, _ := template.New("structTemplate").Parse(structTemplate)
+	tmpl, _ := template.New("structTemplate").Funcs(funcMap).Parse(structTemplate)
 	d.Sanitize()
 	tmpl.Execute(&b, d)
 	return b.String()
