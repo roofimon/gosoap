@@ -122,6 +122,9 @@ type SayHelloRequest struct {
 type SayHelloResponse struct {
 	greeting string
 }
+
+func sayHello(req *SayHelloRequest) (*SayHelloResponse, error) {
+}
 `)
 	var definition Definition = expectedDefinition
 	definition.Sanitize()
@@ -159,4 +162,68 @@ func TestExtractPortType(t *testing.T) {
 		t.Errorf("Expected %v but got %v", expected, portType)
 	}
 
+}
+
+func TestSanitizeInput(t *testing.T) {
+	expected := Input{Message: "SayHelloRequest"}
+	input := Input{Message: "tns:SayHelloRequest"}
+
+	input.Sanitize()
+
+	if expected != input {
+		t.Errorf("Expected %v but got %v", expected, input)
+	}
+}
+
+func TestSanitizeOutput(t *testing.T) {
+	expected := Output{Message: "SayHelloResponse"}
+	output := Output{Message: "tns:SayHelloResponse"}
+
+	output.Sanitize()
+
+	if expected != output {
+		t.Errorf("Expected %v but got %v", expected, output)
+	}
+}
+
+func TestSanitizeOperation(t *testing.T) {
+	expected := Operation{
+		Name:   "sayHello",
+		Input:  Input{Message: "SayHelloRequest"},
+		Output: Output{Message: "SayHelloResponse"},
+	}
+	operation := Operation{
+		Name:   "sayHello",
+		Input:  Input{Message: "tns:SayHelloRequest"},
+		Output: Output{Message: "tns:SayHelloResponse"},
+	}
+
+	operation.Sanitize()
+
+	if expected != operation {
+		t.Errorf("Expected %v but got %v", expected, operation)
+	}
+}
+
+func TestSanitizePortType(t *testing.T) {
+	expected := PortType{
+		Operation: Operation{
+			Name:   "sayHello",
+			Input:  Input{Message: "SayHelloRequest"},
+			Output: Output{Message: "SayHelloResponse"},
+		},
+	}
+	portType := PortType{
+		Operation: Operation{
+			Name:   "sayHello",
+			Input:  Input{Message: "tns:SayHelloRequest"},
+			Output: Output{Message: "tns:SayHelloResponse"},
+		},
+	}
+
+	portType.Sanitize()
+
+	if expected != portType {
+		t.Errorf("Expected %v but got %v", expected, portType)
+	}
 }
