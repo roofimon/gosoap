@@ -41,15 +41,18 @@ func TestSanitizeDefinition(t *testing.T) {
 	}
 }
 
-func TestConvertWSDLPart(t *testing.T) {
-	expected := Part{
-		Name: "firstName",
-		Type: "xsd:string",
+func TestConvertMessage(t *testing.T) {
+	expected := Message{
+		Part{
+			Name: "firstName",
+			Type: "xsd:string",
+		},
 	}
-	partByteArray := []byte(`<part name="firstName" type="xsd:string"/>`)
-	part := ParseWSDLByteArray(partByteArray)
 
-	if part != expected {
-		t.Errorf("Expected %v but got %v", expected, part)
+	messageByteArray := []byte(`<message><part name="firstName" type="xsd:string"/></message>`)
+	message := ParseWSDLByteArray(messageByteArray)
+
+	if message != expected {
+		t.Errorf("Expected %v but got %v", expected, message)
 	}
 }

@@ -15,7 +15,7 @@ func (p *Part) Sanitize() {
 }
 
 type Message struct {
-	Part Part
+	Part Part `xml:"part"`
 }
 
 func (m *Message) Sanitize() {
@@ -32,8 +32,8 @@ func (d *Definition) Sanitize() {
 	}
 }
 
-func ParseWSDLByteArray(partByteArray []byte) Part {
-	var part Part
-	xml.Unmarshal(partByteArray, &part)
-	return part
+func ParseWSDLByteArray(partByteArray []byte) Message {
+	var message Message
+	xml.Unmarshal(partByteArray, &message)
+	return message
 }
