@@ -29,6 +29,7 @@ func (m *Message) Sanitize() {
 type Definition struct {
 	Name     string    `xml:"name,attr"`
 	Messages []Message `xml:"message"`
+	PortType PortType  `xml:"portType"`
 }
 
 func (d *Definition) Sanitize() {
@@ -39,6 +40,20 @@ func (d *Definition) Sanitize() {
 
 func (d *Definition) saveToFile() {
 	ioutil.WriteFile(d.Name+".go", []byte(d.String()), 0644)
+}
+
+type PortType struct {
+	Name      string    `xml:"name,attr"`
+	Operation Operation `xml:"operation"`
+}
+
+type Operation struct {
+	Name  string `xml:"name,attr"`
+	Input Input  `xml:"input"`
+}
+
+type Input struct {
+	Message string `xml:"message,attr"`
 }
 
 var structTemplate = `package ws

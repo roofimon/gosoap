@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/xml"
 	"io/ioutil"
 	"os"
 	"reflect"
@@ -51,11 +52,17 @@ var definitionByteArray []byte = []byte(`<definitions name="HelloService"
    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <message name="SayHelloRequest">
    	<part name="firstName" type="xsd:string"/>
-   	</message>
+   </message>
    <message name="SayHelloResponse">
    	<part name="greeting" type="xsd:string"/>
-   	</message>
-   </definitions>`)
+   </message>
+   <portType name="Hello_PortType">
+      <operation name="sayHello">
+         <input message="tns:SayHelloRequest"/>
+         <output message="tns:SayHelloResponse"/>
+      </operation>
+   </portType>
+</definitions>`)
 
 var expectedDefinition Definition = Definition{
 	Name: "HelloService",
@@ -73,6 +80,13 @@ var expectedDefinition Definition = Definition{
 				Name: "greeting",
 				Type: "xsd:string",
 			},
+		},
+	},
+	PortType: PortType{
+		Name: "Hello_PortType",
+		Operation: Operation{
+			Name:  "sayHello",
+			Input: Input{Message: "tns:SayHelloRequest"},
 		},
 	},
 }
@@ -119,4 +133,28 @@ type SayHelloResponse struct {
 	}
 
 	os.Remove(filename)
+}
+
+func TestExtractPortType(t *testing.T) {
+	expected := PortType{
+		Name: "Hello_PortType",
+		Operation: Operation{
+			Name:  "sayHello",
+			Input: Input{Message: "tns:SayHelloRequest"},
+		},
+	}
+	wsdl := []byte(`   <portType name="Hello_PortType">
+      <operation name="sayHello">
+         <input message="tns:SayHelloRequest"/>
+         <output message="tns:SayHelloResponse"/>
+      </operation>
+   </portType>`)
+
+	var portType PortType
+	xml.Unmarshal(wsdl, &portType)
+
+	if expected != portType {
+		t.Errorf("Expected %v but got %v", expected, portType)
+	}
+
 }
