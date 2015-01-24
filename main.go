@@ -18,3 +18,13 @@ type Message struct {
 func (m *Message) Sanitize() {
 	m.Part.Sanitize()
 }
+
+type Definition struct {
+	Messages []Message
+}
+
+func (d *Definition) Sanitize() {
+	for id := range d.Messages {
+		d.Messages[id].Sanitize()
+	}
+}
