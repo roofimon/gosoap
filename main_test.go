@@ -1,6 +1,8 @@
 package main
 
 import (
+	"io/ioutil"
+	"os"
 	"reflect"
 	"testing"
 )
@@ -82,4 +84,50 @@ func TestConvertDefinitionWithMultipleMessages(t *testing.T) {
 	if !reflect.DeepEqual(expected, definition) {
 		t.Errorf("Expected %v but got %v", expected, definition)
 	}
+}
+
+func TestParseFile(t *testing.T) {
+
+	expected := Definition{
+		Name: "HelloService",
+		Messages: []Message{
+			Message{
+				Name: "SayHelloRequest",
+				Part: Part{
+					Name: "firstName",
+					Type: "xsd:string",
+				},
+			},
+			Message{
+				Name: "SayHelloResponse",
+				Part: Part{
+					Name: "greeting",
+					Type: "xsd:string",
+				},
+			},
+		},
+	}
+	definitionByteArray := []byte(`<definitions name="HelloService"
+   targetNamespace="http://www.examples.com/wsdl/HelloService.wsdl"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns="http://www.examples.com/wsdl/HelloService.wsdl"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <message name="SayHelloRequest">
+   	<part name="firstName" type="xsd:string"/>
+   	</message>
+   <message name="SayHelloResponse">
+   	<part name="greeting" type="xsd:string"/>
+   	</message>
+   </definitions>`)
+
+	file, _ := ioutil.TempFile(os.TempDir(), "")
+	ioutil.WriteFile(file.Name(), definitionByteArray, 0777)
+
+	definition := ParseFile(file.Name())
+
+	if !reflect.DeepEqual(expected, definition) {
+		t.Errorf("Expected %v but got %v", expected, definition)
+	}
+
 }

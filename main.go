@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/xml"
+	"io/ioutil"
 	"strings"
 )
 
@@ -38,4 +39,10 @@ func ParseWSDLByteArray(definitionByteArray []byte) Definition {
 	var definition Definition
 	xml.Unmarshal(definitionByteArray, &definition)
 	return definition
+}
+
+func ParseFile(filename string) Definition {
+	data, _ := ioutil.ReadFile(filename)
+	return ParseWSDLByteArray(data)
+
 }
