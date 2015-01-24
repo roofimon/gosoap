@@ -32,8 +32,8 @@ func (d *Definition) Sanitize() {
 	}
 }
 
-func ParseWSDLByteArray(partByteArray []byte) Message {
-	var message Message
-	xml.Unmarshal(partByteArray, &message)
-	return message
+func ParseWSDLByteArray(definitionByteArray []byte) Definition {
+	var definition Definition
+	xml.Unmarshal(definitionByteArray, &definition)
+	return definition
 }

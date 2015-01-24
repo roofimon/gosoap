@@ -41,18 +41,31 @@ func TestSanitizeDefinition(t *testing.T) {
 	}
 }
 
-func TestConvertMessage(t *testing.T) {
-	expected := Message{
-		Part{
-			Name: "firstName",
-			Type: "xsd:string",
+func TestConvertDefinition(t *testing.T) {
+
+	expected := Definition{
+		Messages: []Message{
+			Message{
+				Part: Part{
+					Name: "firstName",
+					Type: "xsd:string",
+				},
+			},
 		},
 	}
 
-	messageByteArray := []byte(`<message><part name="firstName" type="xsd:string"/></message>`)
-	message := ParseWSDLByteArray(messageByteArray)
+	definitionByteArray := []byte(`<definitions name="HelloService"
+   targetNamespace="http://www.examples.com/wsdl/HelloService.wsdl"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns="http://www.examples.com/wsdl/HelloService.wsdl"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <message><part name="firstName" type="xsd:string"/></message>
+   </definitions>`)
 
-	if message != expected {
-		t.Errorf("Expected %v but got %v", expected, message)
+	definition := ParseWSDLByteArray(definitionByteArray)
+
+	if reflect.DeepEqual(expected, definition) {
+		t.Errorf("Expected %v but got %v", expected, definition)
 	}
 }
