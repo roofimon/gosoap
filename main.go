@@ -6,8 +6,8 @@ import (
 )
 
 type Part struct {
-	Name string `xml:"name,attr"`
-	Type string `xml:"type,attr"`
+	Name string
+	Type string
 }
 
 func (p *Part) Sanitize() {
@@ -15,8 +15,8 @@ func (p *Part) Sanitize() {
 }
 
 type Message struct {
-	Name string `xml:"name,attr"`
-	Part Part   `xml:"part"`
+	Name string
+	Part Part
 }
 
 func (m *Message) Sanitize() {
@@ -24,6 +24,7 @@ func (m *Message) Sanitize() {
 }
 
 type Definition struct {
+	Name     string
 	Messages []Message
 }
 

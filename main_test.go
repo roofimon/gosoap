@@ -44,6 +44,7 @@ func TestSanitizeDefinition(t *testing.T) {
 func TestConvertDefinitionWithMultipleMessages(t *testing.T) {
 
 	expected := Definition{
+		Name: "HelloService",
 		Messages: []Message{
 			Message{
 				Name: "SayHelloRequest",
