@@ -35,6 +35,10 @@ func (d *Definition) Sanitize() {
 	}
 }
 
+func (d *Definition) saveToFile() {
+	ioutil.WriteFile(d.Name+".go", []byte(""), 0644)
+}
+
 func ParseWSDLByteArray(definitionByteArray []byte) Definition {
 	var definition Definition
 	xml.Unmarshal(definitionByteArray, &definition)

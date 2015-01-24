@@ -43,29 +43,7 @@ func TestSanitizeDefinition(t *testing.T) {
 	}
 }
 
-func TestConvertDefinitionWithMultipleMessages(t *testing.T) {
-
-	expected := Definition{
-		Name: "HelloService",
-		Messages: []Message{
-			Message{
-				Name: "SayHelloRequest",
-				Part: Part{
-					Name: "firstName",
-					Type: "xsd:string",
-				},
-			},
-			Message{
-				Name: "SayHelloResponse",
-				Part: Part{
-					Name: "greeting",
-					Type: "xsd:string",
-				},
-			},
-		},
-	}
-
-	definitionByteArray := []byte(`<definitions name="HelloService"
+var definitionByteArray []byte = []byte(`<definitions name="HelloService"
    targetNamespace="http://www.examples.com/wsdl/HelloService.wsdl"
    xmlns="http://schemas.xmlsoap.org/wsdl/"
    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
@@ -79,55 +57,56 @@ func TestConvertDefinitionWithMultipleMessages(t *testing.T) {
    	</message>
    </definitions>`)
 
+var expectedDefinition Definition = Definition{
+	Name: "HelloService",
+	Messages: []Message{
+		Message{
+			Name: "SayHelloRequest",
+			Part: Part{
+				Name: "firstName",
+				Type: "xsd:string",
+			},
+		},
+		Message{
+			Name: "SayHelloResponse",
+			Part: Part{
+				Name: "greeting",
+				Type: "xsd:string",
+			},
+		},
+	},
+}
+
+func TestConvertDefinitionWithMultipleMessages(t *testing.T) {
 	definition := ParseWSDLByteArray(definitionByteArray)
 
-	if !reflect.DeepEqual(expected, definition) {
-		t.Errorf("Expected %v but got %v", expected, definition)
+	if !reflect.DeepEqual(expectedDefinition, definition) {
+		t.Errorf("Expected %v but got %v", expectedDefinition, definition)
 	}
 }
 
 func TestParseFile(t *testing.T) {
-
-	expected := Definition{
-		Name: "HelloService",
-		Messages: []Message{
-			Message{
-				Name: "SayHelloRequest",
-				Part: Part{
-					Name: "firstName",
-					Type: "xsd:string",
-				},
-			},
-			Message{
-				Name: "SayHelloResponse",
-				Part: Part{
-					Name: "greeting",
-					Type: "xsd:string",
-				},
-			},
-		},
-	}
-	definitionByteArray := []byte(`<definitions name="HelloService"
-   targetNamespace="http://www.examples.com/wsdl/HelloService.wsdl"
-   xmlns="http://schemas.xmlsoap.org/wsdl/"
-   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-   xmlns:tns="http://www.examples.com/wsdl/HelloService.wsdl"
-   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <message name="SayHelloRequest">
-   	<part name="firstName" type="xsd:string"/>
-   	</message>
-   <message name="SayHelloResponse">
-   	<part name="greeting" type="xsd:string"/>
-   	</message>
-   </definitions>`)
-
 	file, _ := ioutil.TempFile(os.TempDir(), "")
 	ioutil.WriteFile(file.Name(), definitionByteArray, 0777)
 
 	definition := ParseFile(file.Name())
 
-	if !reflect.DeepEqual(expected, definition) {
-		t.Errorf("Expected %v but got %v", expected, definition)
+	if !reflect.DeepEqual(expectedDefinition, definition) {
+		t.Errorf("Expected %v but got %v", expectedDefinition, definition)
+	}
+}
+
+func TestWriteFile(t *testing.T) {
+	expected := "HelloService.go"
+	var definition Definition = expectedDefinition
+	definition.Sanitize()
+
+	definition.saveToFile()
+
+	if _, err := os.Stat(expected); os.IsNotExist(err) {
+		t.Errorf("no such file or directory: %s", expected)
+		return
 	}
 
+	os.Remove(expected)
 }
