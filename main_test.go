@@ -330,5 +330,40 @@ func TestStringToTemplateString (t *testing.T) {
 	if expected != stringResult {
 		t.Errorf("Expected %s but got %s", expected, stringResult)
 	}	
+}
 
+func TestStringTypesWithInDefinition (t *testing.T) {
+	definition := Definition{
+		Name: "HelloService",
+		Types: Types {
+			Schema: Schema {
+				Elements: []Element {
+					Element {
+						Name: "GetQuote",
+					},
+					Element {
+						Name: "GetQuoteResponse",
+					},
+				},
+			},
+		},
+	}
+
+	expected := []byte(`package ws
+
+type GetQuote struct {
+
+}
+
+type GetQuoteResponse struct {
+
+}
+
+`)
+
+	data := definition.String()
+
+	if string(data) != string(expected) {
+		t.Errorf("Expected %s but got %s", expected, data)
+	}	
 }

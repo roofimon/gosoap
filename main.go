@@ -42,6 +42,7 @@ type {{$message.Name}} struct {
 `
 	var b bytes.Buffer
 	b.WriteString(StructToTemplateString("definitionTemplate", definitionTemplate, d))
+	b.WriteString(d.Types.String())
 	b.WriteString(d.PortType.String())
 	return b.String()
 }
@@ -57,9 +58,9 @@ type PortType struct {
 
 func (p PortType) String() string {
 
-	portTypeTemplate := `func {{title .Operation.Name}}(req *{{removeNamespace .Operation.Input.Message}}) (*{{removeNamespace .Operation.Output.Message}}, error) {
+	portTypeTemplate := `{{if .Operation.Name}}func {{title .Operation.Name}}(req *{{removeNamespace .Operation.Input.Message}}) (*{{removeNamespace .Operation.Output.Message}}, error) {
 }
-`
+{{end}}`
 	return StructToTemplateString("portTypeTemplate", portTypeTemplate, p)
 }
 
@@ -97,6 +98,16 @@ type Types struct {
 	Schema Schema `xml:"schema"`
 }
 
+func (t Types) String() string {
+	var b bytes.Buffer
+	for _, element := range t.Schema.Elements {
+		b.WriteString(element.String())
+		b.WriteString("\n")
+	}
+
+	return b.String()
+}
+
 type Schema struct {
 	ElementFormDefault string `xml:"elementFormDefault,attr"`
 	TargetNamespace string `xml:"targetNamespace,attr"`
@@ -108,7 +119,7 @@ type Element struct {
 	ComplexType ComplexType `xml:"complexType"`
 }
 
-func (e *Element) String() string {
+func (e Element) String() string {
 
 	elementTemplate := `type {{.Name}} struct {
 
