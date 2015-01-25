@@ -36,6 +36,18 @@ type PortType struct {
 	Operation Operation `xml:"operation"`
 }
 
+func (p *PortType) String() string {
+
+	portTypeTemplate := `func {{title .Operation.Name}}(req *{{removeNamespace .Operation.Input.Message}}) (*{{removeNamespace .Operation.Output.Message}}, error) {
+}
+`
+	var b bytes.Buffer
+	tmpl, _ := template.New("portTypeTemplate").Funcs(funcMap).Parse(portTypeTemplate)
+	tmpl.Execute(&b, p)
+	return b.String()
+
+}
+
 type Operation struct {
 	Name   string `xml:"name,attr"`
 	Input  Input  `xml:"input"`

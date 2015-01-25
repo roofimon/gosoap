@@ -291,9 +291,28 @@ func TestElementString (t *testing.T) {
 
 }
 `
-
 	if expected != element.String() {
 		t.Errorf("Expected %s but got %s", expected, element.String())
+	}	
+
+}
+
+func TestPortTypeString (t *testing.T) {
+	portType := PortType{
+		Name: "Hello_PortType",
+		Operation: Operation{
+			Name:   "sayHello",
+			Input:  Input{Message: "tns:SayHelloRequest"},
+			Output: Output{Message: "tns:SayHelloResponse"},
+		},
+	}
+
+
+	expected := `func SayHello(req *SayHelloRequest) (*SayHelloResponse, error) {
+}
+`
+	if expected != portType.String() {
+		t.Errorf("Expected %s but got %s", expected, portType.String())
 	}	
 
 }
