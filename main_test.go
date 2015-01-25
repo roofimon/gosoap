@@ -281,3 +281,19 @@ func TestTypesWillInDefinition (t *testing.T) {
 	}	
 
 }
+
+func TestElementString (t *testing.T) {
+	element := Element {
+		Name: "GetQuoteResponse",
+	}
+
+	expected := `type GetQuoteResponse struct {
+
+}
+`
+
+	if expected != element.String() {
+		t.Errorf("Expected %s but got %s", expected, element.String())
+	}	
+
+}

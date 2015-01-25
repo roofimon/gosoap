@@ -81,6 +81,19 @@ type Element struct {
 	ComplexType ComplexType `xml:"complexType"`
 }
 
+func (e *Element) String() string {
+
+	elementTemplate := `type {{.Name}} struct {
+
+}
+`
+	var b bytes.Buffer
+	tmpl, _ := template.New("elementTemplate").Funcs(funcMap).Parse(elementTemplate)
+	tmpl.Execute(&b, e)
+	return b.String()
+
+}
+
 type ComplexType struct {
 	Sequence Sequence `xml:"sequence"`
 }
