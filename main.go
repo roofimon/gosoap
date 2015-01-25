@@ -25,8 +25,8 @@ type Definition struct {
 	PortType PortType  `xml:"portType"`
 }
 
-func (d *Definition) saveToFile() {
-	ioutil.WriteFile(d.Name+".go", []byte(d.String()), 0644)
+func (d *Definition) saveToFile() error {
+	return ioutil.WriteFile(d.Name+".go", []byte(d.String()), 0644)
 }
 
 type PortType struct {
