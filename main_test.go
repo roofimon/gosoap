@@ -191,6 +191,17 @@ func TestExtractTypes (t *testing.T) {
 		Schema: Schema {
 			ElementFormDefault: "qualified",
 			TargetNamespace: "http://www.webserviceX.NET/",
+			Elements: []Element {
+				Element {
+					Name: "GetQuote",
+				},
+				Element {
+					Name: "GetQuoteResponse",
+				},
+				Element {
+					Name: "string",
+				},
+			},
 		},
 	}
 
@@ -217,7 +228,7 @@ func TestExtractTypes (t *testing.T) {
 	var types Types
 	xml.Unmarshal(wsdl, &types)
 
-	if expected != types {
+	if !reflect.DeepEqual(expected, types) {
 		t.Errorf("Expected %v but got %v", expected, types)
 	}
 

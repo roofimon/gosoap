@@ -72,6 +72,11 @@ type Types struct {
 type Schema struct {
 	ElementFormDefault string `xml:"elementFormDefault,attr"`
 	TargetNamespace string `xml:"targetNamespace,attr"`
+	Elements []Element `xml:"element"`
+}
+
+type Element struct {
+	Name string `xml:"name,attr"`
 }
 
 func RemoveNamespace(input string) string {
