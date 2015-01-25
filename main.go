@@ -65,6 +65,15 @@ type Address struct {
 	Location string `xml:"location,attr"`
 }
 
+type Types struct {
+	Schema Schema `xml:"schema"`
+}
+
+type Schema struct {
+	ElementFormDefault string `xml:"elementFormDefault,attr"`
+	TargetNamespace string `xml:"targetNamespace,attr"`
+}
+
 func RemoveNamespace(input string) string {
 	return input[strings.Index(input, ":")+1:]
 }

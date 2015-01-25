@@ -185,3 +185,40 @@ func TestExtratService (t *testing.T) {
 	}
 
 }
+
+func TestExtractTypes (t *testing.T) {
+	expected := Types {
+		Schema: Schema {
+			ElementFormDefault: "qualified",
+			TargetNamespace: "http://www.webserviceX.NET/",
+		},
+	}
+
+	wsdl := []byte(`  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.webserviceX.NET/">
+      <s:element name="GetQuote">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="symbol" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetQuoteResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetQuoteResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>`)
+
+	var types Types
+	xml.Unmarshal(wsdl, &types)
+
+	if expected != types {
+		t.Errorf("Expected %v but got %v", expected, types)
+	}
+
+}
