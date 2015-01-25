@@ -31,6 +31,21 @@ type Definition struct {
 	Types 	 Types     `xml:"types"`
 }
 
+func (d *Definition) String() string {
+
+	definitionTemplate := `package ws
+{{range $message := .Messages}}
+type {{$message.Name}} struct {
+	{{title $message.Part.Name}} {{removeNamespace $message.Part.Type}}
+}
+{{end}}
+`
+	var b bytes.Buffer
+	b.WriteString(StructToTemplateString("definitionTemplate", definitionTemplate, d))
+	b.WriteString(d.PortType.String())
+	return b.String()
+}
+
 func (d *Definition) saveToFile() error {
 	return ioutil.WriteFile(d.Name+".go", []byte(d.String()), 0644)
 }
@@ -45,18 +60,7 @@ func (p PortType) String() string {
 	portTypeTemplate := `func {{title .Operation.Name}}(req *{{removeNamespace .Operation.Input.Message}}) (*{{removeNamespace .Operation.Output.Message}}, error) {
 }
 `
-	var b bytes.Buffer
-	tmpl, _ := template.New("portTypeTemplate").Funcs(funcMap).Parse(portTypeTemplate)
-	tmpl.Execute(&b, p)
-	return b.String()
-
-}
-
-func StructToTemplateString (templateName string, templateString string, structTemplate TemplateString) string {
-	var b bytes.Buffer
-	tmpl, _ := template.New(templateName).Funcs(funcMap).Parse(templateString)
-	tmpl.Execute(&b, structTemplate)
-	return b.String()
+	return StructToTemplateString("portTypeTemplate", portTypeTemplate, p)
 }
 
 type Operation struct {
@@ -110,11 +114,7 @@ func (e *Element) String() string {
 
 }
 `
-	var b bytes.Buffer
-	tmpl, _ := template.New("elementTemplate").Funcs(funcMap).Parse(elementTemplate)
-	tmpl.Execute(&b, e)
-	return b.String()
-
+	return StructToTemplateString("elementTemplate", elementTemplate, e)
 }
 
 type ComplexType struct {
@@ -130,31 +130,9 @@ type SequenceElement struct {
 	Type string `xml:"type,attr"`
 }
 
-
-func RemoveNamespace(input string) string {
-	return input[strings.Index(input, ":")+1:]
-}
-
 var funcMap template.FuncMap = template.FuncMap{
 	"title":           strings.Title,
 	"removeNamespace": RemoveNamespace,
-}
-
-var structTemplate = `package ws
-{{range $message := .Messages}}
-type {{$message.Name}} struct {
-	{{title $message.Part.Name}} {{removeNamespace $message.Part.Type}}
-}
-{{end}}
-func {{title .PortType.Operation.Name}}(req *{{removeNamespace .PortType.Operation.Input.Message}}) (*{{removeNamespace .PortType.Operation.Output.Message}}, error) {
-}
-`
-
-func (d *Definition) String() string {
-	var b bytes.Buffer
-	tmpl, _ := template.New("structTemplate").Funcs(funcMap).Parse(structTemplate)
-	tmpl.Execute(&b, d)
-	return b.String()
 }
 
 func ParseWSDLByteArray(definitionByteArray []byte) Definition {
@@ -167,6 +145,17 @@ func ParseFile(filename string) Definition {
 	data, _ := ioutil.ReadFile(filename)
 	return ParseWSDLByteArray(data)
 
+}
+
+func RemoveNamespace(input string) string {
+	return input[strings.Index(input, ":")+1:]
+}
+
+func StructToTemplateString (templateName string, templateString string, structTemplate TemplateString) string {
+	var b bytes.Buffer
+	tmpl, _ := template.New(templateName).Funcs(funcMap).Parse(templateString)
+	tmpl.Execute(&b, structTemplate)
+	return b.String()
 }
 
 func main() {
