@@ -48,6 +48,16 @@ type Output struct {
 	Message string `xml:"message,attr"`
 }
 
+type Service struct {
+	Name   string `xml:"name,attr"`
+	Port Port   `xml:"port"`
+}
+
+type Port struct {
+	Name   string `xml:"name,attr"`
+	Binding   string `xml:"binding,attr"`
+}
+
 func RemoveNamespace(input string) string {
 	return input[strings.Index(input, ":")+1:]
 }

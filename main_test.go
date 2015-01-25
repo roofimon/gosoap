@@ -137,3 +137,29 @@ func TestRemoveNamespace(t *testing.T) {
 		t.Errorf("Expected %v but got %v", expected, result)
 	}
 }
+
+func TestExtratService (t *testing.T) {
+	expected := Service {
+		Name: "Hello_Service",
+		Port: Port{
+			Name: "Hello_Port",
+			Binding: "tns:Hello_Binding",
+		},
+	}
+
+	wsdl := []byte(`   <service name="Hello_Service">
+      <documentation>WSDL File for HelloService</documentation>
+      <port binding="tns:Hello_Binding" name="Hello_Port">
+         <soap:address
+            location="http://www.examples.com/SayHello/">
+      </port>
+   </service>`)
+
+	var service Service
+	xml.Unmarshal(wsdl, &service)
+
+	if expected != service {
+		t.Errorf("Expected %v but got %v", expected, service)
+	}
+
+}
