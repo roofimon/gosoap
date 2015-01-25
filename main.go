@@ -45,7 +45,7 @@ type Input struct {
 }
 
 type Output struct {
-	Message string `xml:message,attr"`
+	Message string `xml:"message,attr"`
 }
 
 func RemoveNamespace(input string) string {
