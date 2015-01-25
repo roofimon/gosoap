@@ -28,6 +28,13 @@ var definitionByteArray []byte = []byte(`<definitions name="HelloService"
          <output message="tns:SayHelloResponse"/>
       </operation>
    </portType>
+   <service name="Hello_Service">
+      <documentation>WSDL File for HelloService</documentation>
+      <port binding="tns:Hello_Binding" name="Hello_Port">
+         <soap:address
+            location="http://www.examples.com/SayHello/">
+      </port>
+   </service>
 </definitions>`)
 
 var expectedDefinition Definition = Definition{
@@ -54,6 +61,17 @@ var expectedDefinition Definition = Definition{
 			Name:   "sayHello",
 			Input:  Input{Message: "tns:SayHelloRequest"},
 			Output: Output{Message: "tns:SayHelloResponse"},
+		},
+	},
+	Service: Service {
+		Name: "Hello_Service",
+		Documentation: "WSDL File for HelloService",
+		Port: Port{
+			Name: "Hello_Port",
+			Binding: "tns:Hello_Binding",
+			Address: Address {
+				Location: "http://www.examples.com/SayHello/",
+			},
 		},
 	},
 }

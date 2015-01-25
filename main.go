@@ -23,6 +23,7 @@ type Definition struct {
 	Name     string    `xml:"name,attr"`
 	Messages []Message `xml:"message"`
 	PortType PortType  `xml:"portType"`
+	Service  Service   `xml:"service"`
 }
 
 func (d *Definition) saveToFile() {
