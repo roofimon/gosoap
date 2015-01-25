@@ -77,7 +77,22 @@ type Schema struct {
 
 type Element struct {
 	Name string `xml:"name,attr"`
+	ComplexType ComplexType `xml:"complexType"`
 }
+
+type ComplexType struct {
+	Sequence Sequence `xml:"sequence"`
+}
+
+type Sequence struct {
+	SequenceElement SequenceElement `xml:"element"`
+}
+
+type SequenceElement struct {
+	Name string `xml:"name,attr"`
+	Type string `xml:"type,attr"`
+}
+
 
 func RemoveNamespace(input string) string {
 	return input[strings.Index(input, ":")+1:]

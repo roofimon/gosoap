@@ -194,9 +194,25 @@ func TestExtractTypes (t *testing.T) {
 			Elements: []Element {
 				Element {
 					Name: "GetQuote",
+					ComplexType: ComplexType {
+						Sequence: Sequence {
+							SequenceElement: SequenceElement {
+								Name: "symbol",
+								Type: "s:string",
+							},
+						},
+					},
 				},
 				Element {
 					Name: "GetQuoteResponse",
+					ComplexType: ComplexType {
+						Sequence: Sequence {
+							SequenceElement: SequenceElement {
+								Name: "GetQuoteResult",
+								Type: "s:string",
+							},
+						},
+					},
 				},
 				Element {
 					Name: "string",
