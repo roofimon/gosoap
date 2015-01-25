@@ -144,14 +144,13 @@ func ParseWSDLByteArray(definitionByteArray []byte) Definition {
 func ParseFile(filename string) Definition {
 	data, _ := ioutil.ReadFile(filename)
 	return ParseWSDLByteArray(data)
-
 }
 
 func RemoveNamespace(input string) string {
 	return input[strings.Index(input, ":")+1:]
 }
 
-func StructToTemplateString (templateName string, templateString string, structTemplate TemplateString) string {
+func StructToTemplateString(templateName string, templateString string, structTemplate TemplateString) string {
 	var b bytes.Buffer
 	tmpl, _ := template.New(templateName).Funcs(funcMap).Parse(templateString)
 	tmpl.Execute(&b, structTemplate)
