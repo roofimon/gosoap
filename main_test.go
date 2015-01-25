@@ -141,6 +141,7 @@ func TestRemoveNamespace(t *testing.T) {
 func TestExtratService (t *testing.T) {
 	expected := Service {
 		Name: "Hello_Service",
+		Documentation: "WSDL File for HelloService",
 		Port: Port{
 			Name: "Hello_Port",
 			Binding: "tns:Hello_Binding",

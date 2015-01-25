@@ -50,6 +50,7 @@ type Output struct {
 
 type Service struct {
 	Name   string `xml:"name,attr"`
+	Documentation string `xml:"documentation"`
 	Port Port   `xml:"port"`
 }
 
