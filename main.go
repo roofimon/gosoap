@@ -56,6 +56,11 @@ type Service struct {
 type Port struct {
 	Name   string `xml:"name,attr"`
 	Binding   string `xml:"binding,attr"`
+	Address Address `xml:"address"`
+}
+
+type Address struct {
+	Location string `xml:"location,attr"`
 }
 
 func RemoveNamespace(input string) string {

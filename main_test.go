@@ -144,6 +144,9 @@ func TestExtratService (t *testing.T) {
 		Port: Port{
 			Name: "Hello_Port",
 			Binding: "tns:Hello_Binding",
+			Address: Address {
+				Location: "http://www.examples.com/SayHello/",
+			},
 		},
 	}
 
