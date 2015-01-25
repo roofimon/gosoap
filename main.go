@@ -24,6 +24,7 @@ type Definition struct {
 	Messages []Message `xml:"message"`
 	PortType PortType  `xml:"portType"`
 	Service  Service   `xml:"service"`
+	Types 	 Types     `xml:"types"`
 }
 
 func (d *Definition) saveToFile() {

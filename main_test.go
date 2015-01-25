@@ -249,3 +249,35 @@ func TestExtractTypes (t *testing.T) {
 	}
 
 }
+
+func TestTypesWillInDefinition (t *testing.T) {
+
+	wsdl := []byte(`<definitions name="HelloService"
+   targetNamespace="http://www.examples.com/wsdl/HelloService.wsdl"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns="http://www.examples.com/wsdl/HelloService.wsdl"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+ 	  <s:schema elementFormDefault="qualified" targetNamespace="http://www.webserviceX.NET/"/>
+   </wsdl:types>   
+</definitions>`)
+
+	expected := Definition{
+		Name: "HelloService",
+		Types: Types {
+			Schema: Schema {
+				ElementFormDefault: "qualified",
+				TargetNamespace: "http://www.webserviceX.NET/",
+			},
+		},
+	}
+
+	var definition Definition
+	xml.Unmarshal(wsdl, &definition)
+
+	if !reflect.DeepEqual(expected, definition) {
+		t.Errorf("Expected %v but got %v", expected, definition)
+	}	
+
+}
