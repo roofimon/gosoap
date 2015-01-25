@@ -316,3 +316,19 @@ func TestPortTypeString (t *testing.T) {
 	}	
 
 }
+
+func TestStringToTemplateString (t *testing.T) {
+	stringTemplate := "func {{.Name}}"
+	templateName := "portTypeTemplate"
+	structObject := PortType {
+		Name: "test",
+	}	
+	expected := "func test"
+
+	stringResult := StructToTemplateString(templateName, stringTemplate, structObject)
+
+	if expected != stringResult {
+		t.Errorf("Expected %s but got %s", expected, stringResult)
+	}	
+
+}

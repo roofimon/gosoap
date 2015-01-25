@@ -9,6 +9,10 @@ import (
 	"text/template"
 )
 
+type TemplateString interface {
+    String() string
+}
+
 type Part struct {
 	Name string `xml:"name,attr"`
 	Type string `xml:"type,attr"`
@@ -36,7 +40,7 @@ type PortType struct {
 	Operation Operation `xml:"operation"`
 }
 
-func (p *PortType) String() string {
+func (p PortType) String() string {
 
 	portTypeTemplate := `func {{title .Operation.Name}}(req *{{removeNamespace .Operation.Input.Message}}) (*{{removeNamespace .Operation.Output.Message}}, error) {
 }
@@ -46,6 +50,13 @@ func (p *PortType) String() string {
 	tmpl.Execute(&b, p)
 	return b.String()
 
+}
+
+func StructToTemplateString (templateName string, templateString string, structTemplate TemplateString) string {
+	var b bytes.Buffer
+	tmpl, _ := template.New(templateName).Funcs(funcMap).Parse(templateString)
+	tmpl.Execute(&b, structTemplate)
+	return b.String()
 }
 
 type Operation struct {
