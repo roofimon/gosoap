@@ -196,9 +196,11 @@ func TestExtractTypes (t *testing.T) {
 					Name: "GetQuote",
 					ComplexType: ComplexType {
 						Sequence: Sequence {
-							SequenceElement: SequenceElement {
-								Name: "symbol",
-								Type: "s:string",
+							SequenceElements: []SequenceElement {
+								SequenceElement {
+									Name: "symbol",
+									Type: "s:string",
+								},
 							},
 						},
 					},
@@ -207,9 +209,11 @@ func TestExtractTypes (t *testing.T) {
 					Name: "GetQuoteResponse",
 					ComplexType: ComplexType {
 						Sequence: Sequence {
-							SequenceElement: SequenceElement {
-								Name: "GetQuoteResult",
-								Type: "s:string",
+							SequenceElements: []SequenceElement {
+								SequenceElement {
+									Name: "GetQuoteResult",
+									Type: "s:string",
+								},
 							},
 						},
 					},
@@ -285,10 +289,20 @@ func TestTypesWillInDefinition (t *testing.T) {
 func TestElementString (t *testing.T) {
 	element := Element {
 		Name: "GetQuoteResponse",
+		ComplexType: ComplexType {
+			Sequence: Sequence {
+				SequenceElements: []SequenceElement {
+					SequenceElement {
+						Name: "symbol",
+						Type: "s:string",
+					},
+				},
+			},
+		},
 	}
 
 	expected := `type GetQuoteResponse struct {
-
+	Symbol string
 }
 `
 	if expected != element.String() {

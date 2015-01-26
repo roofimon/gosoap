@@ -121,7 +121,7 @@ type Element struct {
 func (e Element) String() string {
 
 	elementTemplate := `type {{title .Name}} struct {
-
+{{range $sequenceElement := .ComplexType.Sequence.SequenceElements}}	{{title $sequenceElement.Name}} {{removeNamespace $sequenceElement.Type}}{{end}}
 }
 `
 	return StructToTemplateString("elementTemplate", elementTemplate, e)
@@ -132,7 +132,7 @@ type ComplexType struct {
 }
 
 type Sequence struct {
-	SequenceElement SequenceElement `xml:"element"`
+	SequenceElements []SequenceElement `xml:"element"`
 }
 
 type SequenceElement struct {
