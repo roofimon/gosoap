@@ -297,6 +297,21 @@ func TestElementString (t *testing.T) {
 
 }
 
+func TestElementWithUnTitleString (t *testing.T) {
+	element := Element {
+		Name: "testTitle",
+	}
+
+	expected := `type TestTitle struct {
+
+}
+`
+	if expected != element.String() {
+		t.Errorf("Expected %s but got %s", expected, element.String())
+	}	
+
+}
+
 func TestPortTypeString (t *testing.T) {
 	portType := PortType{
 		Name: "Hello_PortType",

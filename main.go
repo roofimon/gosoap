@@ -120,7 +120,7 @@ type Element struct {
 
 func (e Element) String() string {
 
-	elementTemplate := `type {{.Name}} struct {
+	elementTemplate := `type {{title .Name}} struct {
 
 }
 `
