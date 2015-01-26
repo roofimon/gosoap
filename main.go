@@ -39,12 +39,11 @@ type {{$message.Name}} struct {
 	{{title $message.Part.Name}} {{removeNamespace $message.Part.Type}}
 }
 {{end}}
-`
-	var b bytes.Buffer
-	b.WriteString(StructToTemplateString("definitionTemplate", definitionTemplate, d))
-	b.WriteString(d.Types.String())
-	b.WriteString(d.PortType.String())
-	return b.String()
+`	
+	returnString := StructToTemplateString("definitionTemplate", definitionTemplate, d)
+	returnString += d.Types.String()
+	returnString += d.PortType.String()
+	return returnString
 }
 
 func (d *Definition) saveToFile() error {
